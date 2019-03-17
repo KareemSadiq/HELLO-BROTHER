@@ -1,5 +1,5 @@
 
-const socket = io();
+const socket = io('https://waste11.herokuapp.com/');
 
 // $('#chat-list').hide();
 // $('#div-chat').hide();
