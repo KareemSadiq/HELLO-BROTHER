@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Major Project</title>
+        <meta name="google-signin-client_id" content="766885150360-shuv4d02t13pk2tv10qhbk53rvdldbdl.apps.googleusercontent.com">
+
+        <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Playball|Srisakdi|Yellowtail" rel="stylesheet">
+
+        <script src="jquery.js"></script>
+        <script src="peer.js"></script>
+        <script src="socket.io.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <style>
+            body {
+                background-color: white;
+                margin: 0;
+                }
+
+        #localStream {
+
+            margin-left: 2%;
+            position: absolute;
+            height: 15%;
+            width: 15%;
+            z-index: 1;
+            border-style: dotted;
+            border-radius: 45%;
+        }
+
+        #remoteStream {
+            margin-left: 2%;
+            position: absolute;
+            height: 70%;
+            width: 55%;
+            border-style: dashed;
+            border-radius: 10%
+        }
+
+       
+        .modal-content {
+            position: relative;
+            background-color: #ffffff;
+            border: 1px solid #999999;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 0;
+            outline: none;
+            -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+            background-clip: padding-box;
+            }
+
+
+        .modal-header {
+          border-bottom: 1px solid #48a4ac;
+          background: #61bdc5;
+          min-height: 16.4286px;
+          padding: 10px 15px;
+        }
+        .close {
+          float: right;
+          font-size: 21px;
+          font-weight: 700;
+          line-height: 1;
+          color: #000;
+          text-shadow: 0 1px 0 #fff;
+          opacity: .2;
+          filter: alpha(opacity=20);
+        }
+        .modal-body {
+          position: relative;
+          padding: 20px;
+        }
+        .modal-footer {
+          padding: 19px 20px 20px;
+          margin-top: 0;
+          text-align: right;
+          border-top: 1px solid #e5e5e5;
+        }
+
+        hr { 
+          display: block;
+          margin-top: 0.5em;
+          margin-bottom: 0.5em;
+          margin-left: auto;
+          margin-right: auto;
+          border-style: inset;
+          border-width: 1px;
+        }
+
+        .dropbtn {
+         /* background-color: #4CAF50;
+          color: white;*/
+          padding: 16px;
+          font-size: 16px;
+          cursor: pointer;
+        }
+
+        .dropdown {
+          position: relative;
+          display: inline-block;
+        }
+
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+
+        .dropdown-content li {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+        }
+
+        .dropdown-content li:hover {background-color: #f1f1f1}
+
+        .dropdown:hover .dropdown-content {
+          display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+          background-color: #3e8e41;
+        } 
+
+
+
+
+
+   
+
+        </style>
+        <script type="text/javascript">
+
+        </script>
+
+
+    </head>
+    <body onload="checkCookie()">
+        <img id="home_m" src="kk.png" style="height: 9%;width: 15%; float:top-left; margin-top: 0%; margin-left: 0%;">
+        <div class="dropdown" style="float: right; margin-top: 0.8%;margin-right: 2%; width: 10%; ">
+          <button class="dropbtn" style="border-radius: 8%; margin-right: 10%; width: 100%; background-color: lightgreen; ">Profile</button>
+          <div class="dropdown-content">
+          <li id="account" style="list-style-type: none;">Account</li>
+          <li id="logout" style="list-style-type: none;">Logout</li>
+          
+          </div>
+        </div>
+
+        <hr>
+
+        <div id="signin" style="background-image: url('bG.png'); height: 550px;width: 98.8%;">
+            <br/>
+            <div id="login-form" style=" width: 35%; height: 95%;border-radius: 5%; margin-left: 32.7%; border-style: double; background: rgba(0,0,0,0.4);">
+                <br/>
+                <h2 style="font-family: 'Great Vibes', cursive; font-size: 60px; font-style: bold; color: darkblue;">Login</h2>
+                <br/>
+                <br/>
+
+                <label style=" font-family: 'Srisakdi', cursive; margin-left: 10%; font-size: 25px;color: lightblue;">EmailID</label>
+
+                <input type="text" id="l_name"  style="border-radius: 10px;border-color: gray; margin-left:10%;
+                background-color: transparent; font-style: italic; width: 80%; height: 10%; font-size: 22px; color:white; ">
+                <br/>
+
+
+                <label style=" font-family: 'Srisakdi', cursive; margin-left: 10%; font-size: 25px;color: lightblue;">Password</label>
+
+                <input type="password" id="l_pass" style="border-radius: 10px;border-color: gray; margin-left:10%;
+                background-color: transparent; width: 80%; height: 10%; font-size: 22px; color:white;">
+                <br/>
+                <br/>
+                <button type="button" onclick="login('0')" class="btn btn-primary" style="margin-left: 10%; width: 20%; height: 7.5%; font-size: 95%">Login</button>
+                <br/>
+                <br/>
+                <hr>
+                <div class="g-signin2" id="g-auth" data-onsuccess="onSignIn" style="margin-top: 4%;margin-left: 37%; border-radius: 25%;"></div>
+
+
+
+            </div>
+
+
+        </div>
+
+       <!--  <div class="g-signin2" id="g-auth" data-onsuccess="onSignIn" style="margin-top: 10%;margin-left: 37%;"></div>
+ -->
+    
+
+        <div  id = "reg-form" class="container" style="margin-top:7%;">
+    <div class="row">
+    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
+                            <h4 class="modal-title">Ready to Join? Create a New Account</h4>
+                        </div>
+
+                      <!--   <form action="/users" method="post"> -->
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="userEmail">User Name</label>
+                                    <input type="text" class="form-control" required="true" id="uname">
+                                    <span class="help-block">Your email address is used to log in.</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="password">Password</label>
+                                            <input type="password" class="form-control" required="true" id="pass">
+                                            <span class="help-block">Choose a password for your new account.</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="passwordr">Repeat Password</label>
+                                            <input type="password" class="form-control" required="true" id="cpass">
+                                            <span class="help-block">Type the password again. Passwords must match.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <input type="hidden" name="isEmpty" value="">
+                                <button type="input" onclick="getData()" class="btn btn-success btn-icon"><i class="fa fa-check"></i> Create My Account</button>
+                                <button type="button" class="btn btn-default btn-icon" data-dismiss="modal"><i class="fa fa-times-circle"></i> Cancel</button>
+                            </div>
+
+                       <!--  </form>
+                     -->
+
+                    </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    
+       
+     <div id="chat-list" style="margin-top: 1.5%; margin-left: 1%; margin-right:74%;border-radius: 30px;border-color: black;background-color: lightgreen;height: 500px; overflow-y: auto;">
+        <!-- <br/>
+        <br/>
+ -->
+        <p class="h4" style="margin-top:10%;margin-left: 10%; font-size:200%; font-family: 'Srisakdi, cursive;">ONLINE  USERS</p>
+        
+        
+        <ul class="list-group" id="ulUser" style="list-style-type: none;">
+            <!-- <li style="margin-top:10%;font-family: 'Playball', cursive; margin-left: 11%; font-size: 210%; margin-bottom: 5%; border-radius: 10px ;background-color:green; height: 50%; width: 78%;font-style: italic; color: white;">Habeeb</li>
+            <li style="font-family: 'Playball', cursive;margin-left: 11%; font-size: 210%;margin-bottom: 5%; border-radius: 10px ;background-color:green; height: 50%; width: 78%;font-style: italic;color:white;">sadiq</li>
+             -->
+        </ul>
+        
+
+    </div>
+    <div id="div-chat" style="margin-left: 34%; background-color: green; height: 60%;width: 75%; margin-top: -35%;">
+
+        <!-- <h3 id="my-peer">Your ID:</h3> -->
+        <video id="localStream"  ></video>
+        <video id="remoteStream" ></video>
+        <button id="endcall">END</button>
+        <!-- <video id="remoteStream1" ></video>
+        <video id="remoteStream2" ></video>
+         -->
+       <!--  <input type="text" id="remoteId" placeholder="Remote ID">
+        <button id="btnCall">Call</button> -->
+    </div>
+
+    <div id="acwindow" style="margin-left: 10%; margin-top: 2%; background-image: url('home1.jpg'); width: 80%; height: 510px; border-radius: 7%;">
+        <label style="margin-left: 2%; margin-top: 4%; font-size: 210%;">Your Account</label>
+        <br/>
+        <label id="a_user" style="margin-left: 5%;margin-top:4%;font-size: 110%;">Hello</label>
+        <!-- <img src=""> -->
+    </div>
+
+    <div id="Home"style="background-image: url('home.jpg'); width: 99%;height: 550px; margin-left: 0.4%;">
+        <div style="background-color: rgba(0,0,0,0.5); width: 30%; margin-left: 37%; border-radius: 10%; height: 450px;" >
+            <label style="font-size: 310%;font-family:'Great Vibes'; text-align: center; margin-left: 2%;color:lightblue;margin-top: 7%;">Welcome</label>
+            <label id="nm" style="font-size: 310%; margin-left: 2%;color:lightblue;"> </label>
+            <p style="font-size: 110%;color: lightgreen; margin-left: 15%;">Live video Chat with your dear ones </p>
+            <button id="croom" style="background-color: darkblue; width: 50%;margin-left: 25%;height: 10%;margin-top: 40%;border-radius: 10%;color: white;font-size: 110%;">Join Chat Room- VideoChat</button>
+            <br/>
+            <br/>
+            <button id="scroom" style="background-color: darkblue; width: 50%;margin-left: 25%;height: 10%;margin-top: 2%;border-radius: 10%;color: white;font-size: 110%;">Join Chat Room- Screen Share</button>
+        </div>
+
+
+    </div>
+
+    
+    <div id="signup" class="sup">
+        <br/><br/>
+        <input type="text" id="txtUsername" placeholder="Enter UserName">
+        <button id="btnSignUp">Sign Up</button>
+    </div>
+    </body>
+    <script src="main.js"></script>
+</html>
